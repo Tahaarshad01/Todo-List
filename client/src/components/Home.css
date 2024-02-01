@@ -1,0 +1,16 @@
+* {
+  background-color: bisque;
+}
+.btn{
+    margin-right: 5px;
+}
+span{
+    font-size: medium;
+    float: left;
+    margin-left: 300px;
+}
+.input{
+    margin-left: 195px;
+    width: 280px;
+    margin-right: 5px;
+}
