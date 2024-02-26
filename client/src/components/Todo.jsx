@@ -2,15 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import TodoToggle from "./ToogleTodo";
 import "./Home.css";
+import { useDispatch } from "react-redux";
+import { removeTodo, updatedTodo } from "../features/todo/todoSlice";
 
 const Todo = ({ _id }) => {
   const [todos, setTodos] = useState([]);
   const [updateTodo, setUpdateTodo] = useState({ _id: "", data: "" });
   const [newTodoText, setNewTodoText] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   const getData = async () => {
     try {
@@ -26,6 +29,7 @@ const Todo = ({ _id }) => {
       await axios.delete(`http://localhost:3000/delete/${_id}`);
       const updatedTodos = todos.filter((todo) => _id !== todo._id);
       setTodos(updatedTodos);
+      dispatch(removeTodo(_id));
     } catch (error) {
       console.error(error);
     }
@@ -36,12 +40,10 @@ const Todo = ({ _id }) => {
       await axios.put(`http://localhost:3000/update/${updateTodo._id}`, {
         data: newTodoText,
       });
-      const updatedTodos = todos.map((todo) =>
-        todo._id === updateTodo._id ? { ...todo, data: newTodoText } : todo
-      );
-      setTodos(updatedTodos);
+      dispatch(updatedTodo({ id: updateTodo._id, data: newTodoText }));
       setUpdateTodo({ _id: "", data: "" });
       setNewTodoText("");
+      getData();
     } catch (error) {
       console.error(error);
     }

@@ -24,6 +24,7 @@ export const allTodos = async (request, response) => {
   }
 };
 
+
 export const deleteTodos = async (request, response) => {
   try {
     const deleteTodo = await Mern_Todo.findByIdAndDelete(request.params.id);

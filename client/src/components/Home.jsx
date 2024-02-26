@@ -1,24 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Home.css";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../features/todo/todoSlice";
 
 const Home = () => {
   const [input, setInput] = useState("");
+  const dispatch = useDispatch();
 
   const handleInput = (e) => {
     setInput(e.target.value);
+    e.preventDefault();
   };
 
-  const handleSubmit = async () => {
-    try {
-      await axios.post("http://localhost:3000/todos", {
-        data: input,
-      });
-      setInput("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleSubmit = async (e) => {
+  try {
+    e.preventDefault();
+    const response = await axios.post("http://localhost:3000/todos", {
+      data: input,
+    });
+     dispatch(addTodo(response.data));
+    setInput("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <center>
@@ -28,6 +35,7 @@ const Home = () => {
           <input
             placeholder="Enter Todo"
             className="w-25 h-7 m-2"
+            value={input}
             onChange={handleInput}
           ></input>
           <button
